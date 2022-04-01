@@ -1,5 +1,5 @@
 # Detect_Drowsy_Driving_System
-a C# project combined with an Arduino model car.
+a project combined with an Arduino model car.
 
 The program can track user's eyes.
 
