@@ -1,0 +1,76 @@
+class Program
+    {
+        private static readonly CascadeClassifier Classifier
+          = new CascadeClassifier("haar/haarcascade_eye.xml");
+      
+        // private Capture ca;
+
+        static void Main(string[] args)
+        {
+            var count = 0;
+            var capture = new VideoCapture();
+            var viewer = new ImageViewer();
+            Application.Idle += new EventHandler(delegate (object sender, EventArgs e)
+            {
+                // pull image from the camera.
+
+               
+                using (var image = capture.QueryFrame())
+                {
+                    
+                    Rectangle[] rectangles;
+                    Rectangle[] rectangleList = new Rectangle[0];
+                    using (var gray = image.ToImage<Gray, byte>())
+                    {
+                        // detect eyes.
+                        
+
+                        rectangles = Classifier.DetectMultiScale(gray,
+                                                                    scaleFactor: 1.2,
+                                                                    minNeighbors: 12);
+                        if (rectangles.Length == 0)
+                        {
+                            System.Console.WriteLine("Eye Closed");
+                            count += 1;
+                            if(count == 3000)
+                            {
+                                count = 0;
+
+                            }
+                        }
+
+
+                    }
+                   
+
+                    using (var output = image.ToImage<Bgr, byte>())
+                    {
+                        foreach (var rectangle in rectangles)
+                        {
+                            // draw detected locations.
+                            output.Draw(rectangle, new Bgr(0, 0, 255));                            
+
+                     }
+
+                        viewer.Image = output;
+                    }
+
+                   
+
+                }
+                
+
+               
+            });
+
+           
+
+            viewer.ShowDialog();
+            System.Console.ReadLine();
+          
+        }
+
+
+       
+    }
+    }

@@ -1,0 +1,1 @@
+Copy "SampleEye.jpg" and "SampleHue.jpg" to "C:\" directory if you dont want to create your own eye and hue templates.
